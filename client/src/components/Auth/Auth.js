@@ -8,6 +8,7 @@ import Input from "./input";
 import Icon from "./icon";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
+import {signin, signup} from "../../actions/auth";
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 const Auth = () => {
@@ -20,14 +21,21 @@ const Auth = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
+        if(isSignup) {
+            dispatch(signup(formData, history));
+        } else {
+            dispatch(signin(formData, history));
+        }
     };
-    const handleChange = () => {
-        
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+
     };
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
     const switchMode = () => {
         setIsSignup((prevIsSignup) => !prevIsSignup);
-        setShowPassword(false); 
+        // setShowPassword(false); 
+        handleShowPassword(false);
     };
     const googleSuccess = async (res) => {
         console.log(res);
@@ -104,25 +112,25 @@ const Auth = () => {
                     /> */}
                     <GoogleLogin style={window.innerWidth > 960 ? {width: "100%"} : {width: "100%"}}
                         clientId="901678272636-p2i1ea4vai8esjsa4bdvola9tukfdsou.apps.googleusercontent.com"
-                        // buttonText="Sign in with Google"
-                        // onSuccess={googleSuccess}
-                        // onFailure={googleFailure}
-                        // cookiePolicy={'single_host_origin'}
-                        // isSignedIn={true}
-                        render={(renderProps) => (
-                            <Button className={classes.googleButton}
-                                color="primary"
-                                fullWidth
-                                onClick={renderProps.onClick}
-                                disabled={renderProps.disabled}
-                                startIcon={<Icon />}
-                                variant="contained">
-                                Google Sign In
-                            </Button>
-                        )}
+                        buttonText="Sign in with Google"
                         onSuccess={googleSuccess}
                         onFailure={googleFailure}
                         cookiePolicy={'single_host_origin'}
+                        
+                        // render={(renderProps) => (
+                        //     <Button className={classes.googleButton}
+                        //         color="primary"
+                        //         fullWidth
+                        //         onClick={renderProps.onClick}
+                        //         disabled={renderProps.disabled}
+                        //         startIcon={<Icon />}
+                        //         variant="contained">
+                        //         Google Sign In
+                        //     </Button>
+                        // )}
+                        // onSuccess={googleSuccess}
+                        // onFailure={googleFailure}
+                        // cookiePolicy={'single_host_origin'}
                         
 
                     />
